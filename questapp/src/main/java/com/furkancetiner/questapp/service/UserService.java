@@ -26,4 +26,23 @@ public class UserService {
 	public List<User> findAll() {
 		return userRepository.findAll();
 	}
+	
+	public void deleteUser(Long userId) {
+		userRepository.deleteById(userId);
+	}
+	
+	
+	public User updateUser(Long userId, User newUser) {
+		Optional<User> user = userRepository.findById(userId);
+		
+		if(user.isPresent()) {
+			User foundUser = user.get();
+			foundUser.setUserName(newUser.getUserName());
+			foundUser.setPassword(newUser.getPassword());
+			return userRepository.save(foundUser);
+		}
+		
+		return null;//return an exception
+	}
+	
 }
