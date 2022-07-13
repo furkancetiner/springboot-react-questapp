@@ -1,0 +1,13 @@
+.link{
+    text-decoration: none;
+    box-shadow: none;
+    color: white;
+}
+
+.title{
+    flex-grow: 1;
+    text-align: left;
+    text-decoration: none;
+    box-shadow: none;
+    color: white;
+}
