@@ -37,7 +37,7 @@ public class UserController {
 	
 	@GetMapping("/{userId}")
 	public User getUser(@PathVariable Long userId){
-		return userService.findByUserId(userId).orElse(null);
+		return userService.getUserByUserId(userId);
 	}
 	
 	@GetMapping()
@@ -53,9 +53,9 @@ public class UserController {
 	@DeleteMapping("/{userId}")
 	public void deleteUser(@PathVariable Long userId) {
 		
-		Optional<User> user = userService.findByUserId(userId);
+		User user = userService.getUserByUserId(userId);
 		
-		if(user.isPresent()) {
+		if(user!=null) {
 			userService.deleteUser(userId);
 		}	
 	}

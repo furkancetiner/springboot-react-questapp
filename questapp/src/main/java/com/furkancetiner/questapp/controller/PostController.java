@@ -19,6 +19,7 @@ import com.furkancetiner.questapp.entities.Post;
 import com.furkancetiner.questapp.entities.User;
 import com.furkancetiner.questapp.request.PostCreateRequest;
 import com.furkancetiner.questapp.request.PostUpdateRequest;
+import com.furkancetiner.questapp.response.PostResponse;
 import com.furkancetiner.questapp.service.PostService;
 
 @RestController
@@ -35,14 +36,14 @@ public class PostController {
 	//"/posts"
 	//"/posts?userId={userId}"
 	@GetMapping
-	public List<Post> getAllPost(@PathParam(value = "userId") Optional<Long> userId){
+	public List<PostResponse> getAllPost(@PathParam(value = "userId") Optional<Long> userId){
 		return postService.getAllPost(userId);
 	}
 	
 	
 	// "/posts/{postId}"
 	@GetMapping("/{postId}")
-	public Optional<Post> getUserPost(@PathVariable Long postId){
+	public Post getUserPost(@PathVariable Long postId){
 		return postService.getByPostId(postId);
 	}
 	

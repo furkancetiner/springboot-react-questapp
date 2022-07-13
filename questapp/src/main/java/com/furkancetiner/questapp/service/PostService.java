@@ -2,6 +2,7 @@ package com.furkancetiner.questapp.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import com.furkancetiner.questapp.entities.User;
 import com.furkancetiner.questapp.repository.PostRepository;
 import com.furkancetiner.questapp.request.PostCreateRequest;
 import com.furkancetiner.questapp.request.PostUpdateRequest;
+import com.furkancetiner.questapp.response.PostResponse;
 
 @Service
 public class PostService {
@@ -21,24 +23,26 @@ public class PostService {
 	@Autowired
 	private UserService userService;
 
-	public List<Post> getAllPost(Optional<Long> userId) {
-
+	public List<PostResponse> getAllPost(Optional<Long> userId) {
+		List<Post> postList;
 		if (userId.isPresent()) {
-			return postRepository.findByUserId(userId.get());
+			postList = postRepository.findByUserId(userId.get());
+		}else {
+			postList = postRepository.findAll();
 		}
-		return postRepository.findAll();
+		return postList.stream().map(p-> new PostResponse(p)).collect(Collectors.toList());
 	}
 
-	public Optional<Post> getByPostId(Long postId) {
-		return postRepository.findById(postId);
+	public Post getByPostId(Long postId) {
+		return postRepository.findById(postId).orElse(null);
 	}
 
 	public Post createPost(PostCreateRequest newPostRequest) {
 
-		Optional<User> user = userService.findByUserId(newPostRequest.getUserId());
+		User user = userService.getUserByUserId(newPostRequest.getUserId());
 
-		if (user.isPresent()) {
-			Post post = Post.builder().text(newPostRequest.getText()).title(newPostRequest.getTitle()).user(user.get())
+		if (user!=null) {
+			Post post = Post.builder().text(newPostRequest.getText()).title(newPostRequest.getTitle()).user(user)
 					.id(newPostRequest.getId()).build();
 			return postRepository.save(post);
 		}
